@@ -73,7 +73,7 @@
 								"type": "Expression"
 							},
 							"date": {
-								"value": "@pipeline().parameters.date",
+								"value": "@utcNow('yyyy-MM-dd')",
 								"type": "Expression"
 							},
 							"file_name": {
