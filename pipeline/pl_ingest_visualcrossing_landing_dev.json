@@ -91,7 +91,7 @@
 				"typeProperties": {
 					"method": "GET",
 					"url": {
-						"value": "https://kv-atmos-dev-westue2-001.vault.azure.net/secrets/visualcrossing-api-key-dev/495e7ae8019?api-version=2025-07-01",
+						"value": "https://kv-atmos-dev-westue2-001.vault.azure.net/secrets/visualcrossing-api-key-dev/d022d52ebf6a4e3fbc61f495e7ae8019?api-version=2025-07-01",
 						"type": "Expression"
 					},
 					"authentication": {
