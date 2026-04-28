@@ -73,6 +73,25 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "https://kv-atmos-dev-westue2-001.vault.azure.net//secrets/visualcrossing-api-key-dev/495e7ae8019?api-version=2025-07-01",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
