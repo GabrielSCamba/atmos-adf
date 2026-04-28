@@ -87,9 +87,14 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"method": "GET",
 					"url": {
 						"value": "https://kv-atmos-dev-westue2-001.vault.azure.net//secrets/visualcrossing-api-key-dev/495e7ae8019?api-version=2025-07-01",
 						"type": "Expression"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net/"
 					}
 				}
 			}
