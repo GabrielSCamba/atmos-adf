@@ -1,0 +1,68 @@
+{
+	"name": "pl_ingest_inmet_landing_dev",
+	"properties": {
+		"activities": [
+			{
+				"name": "web_get_apikey",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": {
+						"value": "https://kv-atmos-dev-westue2-001.vault.azure.net/secrets/visualcrossing-api-key-dev/d022d52ebf6a4e3fbc61f495e7ae8019?api-version=2025-07-01",
+						"type": "Expression"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net/"
+					}
+				}
+			},
+			{
+				"name": "set_year_list",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "year_list",
+					"value": {
+						"value": "@range(\n    pipeline().parameters.startYear,\n    add(\n        sub(\n            pipeline().parameters.endYear, \n            pipeline().parameters.startYear\n        ), \n        1\n    )\n)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"id_estacao": {
+				"type": "string"
+			},
+			"startYear": {
+				"type": "int"
+			},
+			"endYear": {
+				"type": "int"
+			}
+		},
+		"variables": {
+			"year_list": {
+				"type": "Array"
+			}
+		},
+		"folder": {
+			"name": "INMET"
+		},
+		"annotations": []
+	}
+}
