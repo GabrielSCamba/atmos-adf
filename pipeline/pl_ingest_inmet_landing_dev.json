@@ -136,7 +136,11 @@
 											"type": "Expression"
 										},
 										"file_name": {
-											"value": "@toLower(concat('atmos_', pipeline().parameters.id_estacao, formatDateTime(utcNow(), 'yyyyMMddHHmmss'), '.csv'))",
+											"value": "@toLower(\n    concat(\n        'atmos_', \n        pipeline().parameters.id_estacao,\n        '_',\n        string(item()),\n        formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n        '.csv'\n    )\n)",
+											"type": "Expression"
+										},
+										"id_estacao": {
+											"value": "@pipeline().parameters.id_estacao",
 											"type": "Expression"
 										}
 									}
