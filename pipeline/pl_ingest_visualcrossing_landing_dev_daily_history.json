@@ -3,83 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "copy_visualcrossing_to_landing",
-				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "JsonSource",
-						"storeSettings": {
-							"type": "HttpReadSettings",
-							"requestMethod": "GET"
-						},
-						"formatSettings": {
-							"type": "JsonReadSettings"
-						}
-					},
-					"sink": {
-						"type": "JsonSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "JsonWriteSettings"
-						}
-					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "ds_json_visualcrossing_src_dev",
-						"type": "DatasetReference",
-						"parameters": {
-							"city": {
-								"value": "@pipeline().parameters.city",
-								"type": "Expression"
-							},
-							"date": {
-								"value": "@variables('date_now')",
-								"type": "Expression"
-							},
-							"api_key": {
-								"value": "@activity('web_get_apikey').output.value",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "ds_js_visualcrossing_landing_dev",
-						"type": "DatasetReference",
-						"parameters": {
-							"city": {
-								"value": "@pipeline().parameters.city",
-								"type": "Expression"
-							},
-							"date": {
-								"value": "@utcNow('yyyy-MM-dd')",
-								"type": "Expression"
-							},
-							"file_name": {
-								"value": "@toLower(concat('atmos_', pipeline().parameters.city, '_', formatDateTime(utcNow(), 'yyyyMMddHHmmss'), '.json'))",
-								"type": "Expression"
-							}
-						}
-					}
-				]
-			},
-			{
 				"name": "web_get_apikey",
 				"type": "WebActivity",
 				"dependsOn": [],
@@ -125,6 +48,93 @@
 						"value": "@range(\r\n    0,\r\n    add(\r\n        div(\r\n            sub(\r\n                ticks(pipeline().parameters.end_date), \r\n                ticks(pipeline().parameters.start_date)\r\n            ),864000000000\r\n        ),1\r\n    )\r\n)",
 						"type": "Expression"
 					}
+				}
+			},
+			{
+				"name": "Foreach_date",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"activities": [
+						{
+							"name": "copy_visualcrossing_to_landing",
+							"type": "Copy",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "JsonSource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
+									},
+									"formatSettings": {
+										"type": "JsonReadSettings"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_json_visualcrossing_src_dev",
+									"type": "DatasetReference",
+									"parameters": {
+										"city": {
+											"value": "@pipeline().parameters.city",
+											"type": "Expression"
+										},
+										"date": {
+											"value": "@variables('date_now')",
+											"type": "Expression"
+										},
+										"api_key": {
+											"value": "@activity('web_get_apikey').output.value",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_js_visualcrossing_landing_dev",
+									"type": "DatasetReference",
+									"parameters": {
+										"city": {
+											"value": "@pipeline().parameters.city",
+											"type": "Expression"
+										},
+										"date": {
+											"value": "@utcNow('yyyy-MM-dd')",
+											"type": "Expression"
+										},
+										"file_name": {
+											"value": "@toLower(concat('atmos_', pipeline().parameters.city, '_', formatDateTime(utcNow(), 'yyyyMMddHHmmss'), '.json'))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
 				}
 			}
 		],
