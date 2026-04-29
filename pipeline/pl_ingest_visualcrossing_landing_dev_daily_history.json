@@ -45,7 +45,7 @@
 				"typeProperties": {
 					"variableName": "date_list",
 					"value": {
-						"value": "@range(\r\n    0,\r\n    add(\r\n        div(\r\n            sub(\r\n                ticks(pipeline().parameters.end_date), \r\n                ticks(pipeline().parameters.start_date)\r\n            ),864000000000\r\n        ),1\r\n    )\r\n)",
+						"value": "@range(\n    0,\n    add(\n        div(\n            sub(\n                ticks(pipeline().parameters.endDate), \n                ticks(pipeline().parameters.startDate)\n            ),864000000000\n        ),1\n    )\n)",
 						"type": "Expression"
 					}
 				}
@@ -53,9 +53,21 @@
 			{
 				"name": "Foreach_date",
 				"type": "ForEach",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "set_date_list",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@variables('date_list')",
+						"type": "Expression"
+					},
+					"batchCount": 10,
 					"activities": [
 						{
 							"name": "copy_visualcrossing_to_landing",
@@ -103,7 +115,7 @@
 											"type": "Expression"
 										},
 										"date": {
-											"value": "@variables('date_now')",
+											"value": "@formatDateTime(\n    addDays(\n        pipeline().parameters.startDate, \n        item()\n    ), \n    'yyyy-MM-dd'\n)",
 											"type": "Expression"
 										},
 										"api_key": {
@@ -142,10 +154,10 @@
 			"city": {
 				"type": "string"
 			},
-			"start_date": {
+			"startDate": {
 				"type": "string"
 			},
-			"end_date": {
+			"endDate": {
 				"type": "string"
 			}
 		},
