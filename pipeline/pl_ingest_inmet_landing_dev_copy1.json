@@ -104,17 +104,6 @@
 				]
 			}
 		],
-		"parameters": {
-			"id_estacao": {
-				"type": "string"
-			},
-			"startYear": {
-				"type": "int"
-			},
-			"endYear": {
-				"type": "int"
-			}
-		},
 		"variables": {
 			"year_list": {
 				"type": "Array"
