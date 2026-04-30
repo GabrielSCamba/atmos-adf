@@ -47,10 +47,14 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "GoogleBigQueryV2Source",
-						"query": {
-							"value": "@concat(\n        'SELECT * FROM `basedosdados.br_inmet_bdmep.estacao`'\n)",
-							"type": "Expression"
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
 						}
 					},
 					"sink": {
@@ -76,7 +80,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_bigquery_inmet_src_dev",
+						"referenceName": "ds_csv_inmet_landing_dev_copy1",
 						"type": "DatasetReference"
 					}
 				],
