@@ -76,7 +76,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_bigquery_inmet_src_dev",
+						"referenceName": "ds_bigquery_inmet_src_dev_copy1",
 						"type": "DatasetReference"
 					}
 				],
