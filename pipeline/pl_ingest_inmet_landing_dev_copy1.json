@@ -81,7 +81,13 @@
 				"inputs": [
 					{
 						"referenceName": "ds_csv_inmet_landing_dev_copy1",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"file_name": {
+								"value": "@toLower(\n    concat(\n        'atmos_estacao_',\n        formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n        '.csv'\n    )\n)",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
