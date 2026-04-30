@@ -47,14 +47,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
+						"type": "GoogleBigQueryV2Source",
+						"query": {
+							"value": "@concat(\n        'SELECT * FROM `basedosdados.br_inmet_bdmep.estacao`'\n)",
+							"type": "Expression"
 						}
 					},
 					"sink": {
@@ -80,14 +76,8 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_csv_inmet_landing_dev_copy1",
-						"type": "DatasetReference",
-						"parameters": {
-							"file_name": {
-								"value": "@toLower(\n    concat(\n        'atmos_estacao_',\n        formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n        '.csv'\n    )\n)",
-								"type": "Expression"
-							}
-						}
+						"referenceName": "ds_bigquery_inmet_src_dev",
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
