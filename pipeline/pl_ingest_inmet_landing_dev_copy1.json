@@ -1,0 +1,118 @@
+{
+	"name": "pl_ingest_inmet_landing_dev_copy1",
+	"properties": {
+		"activities": [
+			{
+				"name": "web_get_apikey",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": {
+						"value": "https://kv-atmos-dev-westue2-001.vault.azure.net/secrets/visualcrossing-api-key-dev/d022d52ebf6a4e3fbc61f495e7ae8019?api-version=2025-07-01",
+						"type": "Expression"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net/"
+					}
+				}
+			},
+			{
+				"name": "copy_inmet_to_landing_copy1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "web_get_apikey",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "GoogleBigQueryV2Source",
+						"query": {
+							"value": "@concat(\n        'SELECT * FROM `basedosdados.br_inmet_bdmep.estacao`'\n)",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_bigquery_inmet_src_dev",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_csv_inmet_landing_dev",
+						"type": "DatasetReference",
+						"parameters": {
+							"file_name": {
+								"value": "@toLower(\n    concat(\n        'atmos_estacao',\n        formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n        '.csv'\n    )\n)",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"id_estacao": {
+				"type": "string"
+			},
+			"startYear": {
+				"type": "int"
+			},
+			"endYear": {
+				"type": "int"
+			}
+		},
+		"variables": {
+			"year_list": {
+				"type": "Array"
+			}
+		},
+		"folder": {
+			"name": "INMET"
+		},
+		"annotations": []
+	}
+}
