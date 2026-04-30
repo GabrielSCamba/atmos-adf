@@ -6,13 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"ano": {
-				"type": "string"
-			},
 			"file_name": {
-				"type": "string"
-			},
-			"id_estacao": {
 				"type": "string"
 			}
 		},
